@@ -1,6 +1,7 @@
 @import url(//fonts.googleapis.com/css?family=Open+Sans+Condensed:300&display=swap);
 body{
   font-family: 'Open Sans Condensed';
+  padding: 20px 60px;
 }
 .App {
   text-align: center;
