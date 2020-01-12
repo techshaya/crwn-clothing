@@ -8,6 +8,7 @@ import CartDropdown from  '../cart-dropdown/cart-dropdown.component';
 import {connect} from 'react-redux';
 const mapStateToProps =({user:{currentUser},cart:{hidden}}) =>
 {
+	console.log('currentUser',currentUser)
     return({
     	          currentUser:currentUser,
     	          hidden:hidden
@@ -30,7 +31,7 @@ const Header =({currentUser,hidden}) =>
 		          </Link>
 		          <CartIcon />
 		          {
-
+                      
 		          	  currentUser ? <div className="option"onClick={()=>auth.signOut()} >Sign Out</div>:
 		          	  	<Link className="option" to="/signin">Sign In</Link>
 		          }

@@ -8,6 +8,7 @@ import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up
 import {auth,createUserProfileDocument} from './firebase/firebase.utils.js';
 import {connect} from 'react-redux';
 import {setCurrentUser} from './redux/user/user.actions';
+
 const mapStateToProps = ({user})=>
 {
    return(
@@ -17,6 +18,7 @@ const mapStateToProps = ({user})=>
 }
 const mapDispatchToProps =(dispatch) =>
 {
+
    return({setCurrentUser:(user)=>dispatch(setCurrentUser(user))})
 }
 const HatsPage =() =>
@@ -35,7 +37,7 @@ class App extends React.Component{
    componentDidMount()
    {
        const {setCurrentUser} = this.props;
-      this.unsubscribeFromAuth = auth.onAuthStateChanged(async(userAuth) =>{
+       auth.onAuthStateChanged(async(userAuth) =>{
 
         if(userAuth)
         {
@@ -55,6 +57,7 @@ class App extends React.Component{
            })
           
         }
+        console.log('userAuth',userAuth)
         setCurrentUser({userAuth})
         
          // this.setState({currentUser:user});
