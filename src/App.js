@@ -9,17 +9,17 @@ import {auth,createUserProfileDocument} from './firebase/firebase.utils.js';
 import {connect} from 'react-redux';
 import {setCurrentUser} from './redux/user/user.actions';
 
-const mapStateToProps = ({user})=>
+const mapStateToProps = ({user:{currentUser}})=>
 {
    return(
    {
-      currentUser:user.currentUser,
+      currentUser:currentUser,
    })
 }
 const mapDispatchToProps =(dispatch) =>
 {
 
-   return({setCurrentUser:(user)=>dispatch(setCurrentUser(user))})
+   return({setCurrentUser:(curuser)=>dispatch(setCurrentUser(curuser))})
 }
 const HatsPage =() =>
 {
@@ -44,7 +44,7 @@ class App extends React.Component{
            const userRef = await createUserProfileDocument(userAuth);
            userRef.onSnapshot(snapShot =>
            {
-              //console.log(snapShot)
+              console.log(snapShot)
               setCurrentUser({
                    id:snapShot.id,...snapShot.data()
               })
@@ -58,7 +58,7 @@ class App extends React.Component{
           
         }
         console.log('userAuth',userAuth)
-        setCurrentUser({userAuth})
+        setCurrentUser(userAuth)
         
          // this.setState({currentUser:user});
          //console.log(user)
