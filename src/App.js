@@ -33,6 +33,10 @@ const HatsPage =() =>
 {
 	return(<div><h1>HATS PAGE</h1></div>)
 }
+const JacketsPage =() =>
+{
+  return(<div><h1>JACKETS PAGE</h1></div>)
+}
 class App extends React.Component{
    // constructor()
    // {
@@ -84,6 +88,7 @@ class App extends React.Component{
             <Switch>
              <Route exact path='/' component={Homepage} />
              <Route path='/hats' component={HatsPage} />
+             <Route path='/jackets' component={JacketsPage} />
              <Route path='/shop' component={ShopPage} />
              <Route exact path='/checkout' component={CheckoutPage} />
              {/*<Route exact path='/signin' component={SignInAndSignUpPage} /> */}
