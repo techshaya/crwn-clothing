@@ -45,7 +45,7 @@ class App extends React.Component{
    //      currentUser:null
    //     }
    // }
-   unsubscribeFromAuth = null
+   unsubscribeFromAuth =()=>(null)
    componentDidMount()
    {
        const {setCurrentUser} = this.props;
