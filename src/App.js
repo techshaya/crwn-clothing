@@ -12,6 +12,7 @@ import {auth,createUserProfileDocument} from './firebase/firebase.utils.js';
 import {connect} from 'react-redux';
 import {setCurrentUser} from './redux/user/user.actions';
 import {selectCurrentUser} from './redux/user/user.selectors';
+import {selectShopCollections} from './redux/shop/shop.selectors';
 import {createStructuredSelector} from 'reselect';
 // const mapStateToProps = ({user:{currentUser}})=>
 // {
@@ -22,7 +23,8 @@ import {createStructuredSelector} from 'reselect';
 // }
 const mapStateToProps = createStructuredSelector(
 {
-    currentUser:selectCurrentUser
+    currentUser:selectCurrentUser,
+    collections:selectShopCollections
 })
 const mapDispatchToProps =(dispatch) =>
 {
@@ -45,11 +47,12 @@ class App extends React.Component{
    //      currentUser:null
    //     }
    // }
-   unsubscribeFromAuth =()=>(null)
+   unsubscribeFromAuth = null;
    componentDidMount()
    {
+    
        const {setCurrentUser} = this.props;
-       auth.onAuthStateChanged(async(userAuth) =>{
+       this.unsubscribeFromAuth = auth.onAuthStateChanged(async(userAuth) =>{
 
         if(userAuth)
         {
@@ -71,14 +74,14 @@ class App extends React.Component{
         }
         console.log('userAuth',userAuth)
         setCurrentUser(userAuth)
-        
+        //addCollectionAndDocuments('collections',collectionsArray.map(({title,items})=>({title,items})))
          // this.setState({currentUser:user});
          //console.log(user)
       })
    } 
    componentWillUnmount()
    {
-     this.unsubscribeFromAuth()
+     this.unsubscribeFromAuth();
    }
    render()
    {
