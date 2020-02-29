@@ -19,15 +19,18 @@ const config = {
     {
     	return
     }
-    //console.log(userAuth)
+    console.log('userAuth',userAuth)
+    console.log('userAuthUID',userAuth.uid)
     const userRef = firestore.doc(`users/${userAuth.uid}`);
-    const snapshot =  await userRef.get();
+    console.log('userRef',userRef)
+    const snapshot = await userRef.get();
+    console.log('snapshot',snapshot)
     if(!snapshot.exists)
     {
     	const {displayName,email} = userAuth;
     	const createdAt = new Date();
     	try {
-    		 await userRef.set({
+    		 userRef.set({
     		 	   displayName,email,createdAt,...additionalData
     		 })
     	} 
@@ -37,7 +40,7 @@ const config = {
     		console.log('error creating the user',e.message);
     	}
     }
-    console.log('userRef',userRef)
+    
     return userRef;
  }
  export const addCollectionAndDocuments = async(collectionKey,objectsToAdd) =>
@@ -51,14 +54,23 @@ const config = {
     })
     return await batch.commit();
  }
-
+export const getCurrentUser =()=>
+{
+    return new Promise((resolve,reject)=>{
+      const unsubscribe = auth.onAuthStateChanged((userAuth)=>
+      {
+         unsubscribe()
+         resolve(userAuth)
+      },reject)
+    })
+}
  export const convertCollectionsSnapshotToMap = (collections) =>
  {
      const transformedCollection = collections.docs.map(doc =>{
         // console.log('docdata',doc.data())
         const {title,items} = doc.data();
-        console.log('title',{title})
-        console.log('items',{items})
+        // console.log('title',{title})
+        // console.log('items',{items})
         return ({
                     routeName: encodeURI(title.toLowerCase()),
                     id:doc.id,
@@ -78,9 +90,9 @@ const config = {
   export const auth = firebase.auth();
   
 
-  const provider = new firebase.auth.GoogleAuthProvider();
-  provider.setCustomParameters({prompt:'select_account'});
-  export const signInWithGoogle = () => auth.signInWithPopup(provider)
+  export const googleProvider = new firebase.auth.GoogleAuthProvider();
+  googleProvider.setCustomParameters({prompt:'select_account'});
+  export const signInWithGoogle = () => auth.signInWithPopup(googleProvider)
 
   
 export default firebase;

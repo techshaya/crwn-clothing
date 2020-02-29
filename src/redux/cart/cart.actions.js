@@ -1,4 +1,4 @@
-import {TOGGLE_CART_HIDDEN,ADD_ITEM,CLEAR_ITEM_FROM_CART,REMOVE_ITEM} from './cart.constants';
+import {TOGGLE_CART_HIDDEN,ADD_ITEM,CLEAR_ITEM_FROM_CART,REMOVE_ITEM,CLEAR_CART} from './cart.constants';
 
 export const toggleCartHidden =() =>
 {
@@ -30,4 +30,10 @@ export const clearItem=(item)=>
     	type:CLEAR_ITEM_FROM_CART,
     	payload:item
     })
+}
+export const clearCart=()=>
+{
+	return({
+		type:CLEAR_CART
+	})
 }

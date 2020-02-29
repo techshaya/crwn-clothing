@@ -1,59 +1,44 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {connect} from 'react-redux'; 
-import {createStructuredSelector} from 'reselect';
 import {Route} from 'react-router-dom';
-import {firestore,convertCollectionsSnapshotToMap} from '../../firebase/firebase.utils';
-import {updateCollections} from '../../redux/shop/shop.actions';
+import {fetchCollectionsStart} from '../../redux/shop/shop.actions';
+// import {selectIsCollectionsLoaded} from '../../redux/shop/shop.selectors';
 // import CollectionPreview from '../../components/collection-preview/collection-preview.component';
-import CollectionsOverview from '../../components/collections-overview/collections-overview.component';
-import CollectionPage from '../collection/collection.component'; 
-import WithSpinner from '../../components/with-spinner/with-spinner.component';
+//import CollectionsOverview from '../../components/collections-overview/collections-overview.component';
+import collectionsOverviewContainer  from '../../components/collections-overview/collections-overview.container';
+//import CollectionPage from '../collection/collection.component'; 
+import collectionPageContainer from '../collection/collection.container';
+// import WithSpinner from '../../components/with-spinner/with-spinner.component';
 // const mapDispatchToProps = (dispatch)=>({
 // 	updateCollections:collectionsMap =>
 // 	    dispatch(updateCollections(collectionsMap))})
-const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview);
-const CollectionPageWithSpinner = WithSpinner(CollectionPage);
-class  ShopPage  extends React.Component
-{
-	state = {
-		loading:true
-	}
-	unsubscribeFromSnapshot =null
-	componentDidMount()
-	{
-		 const {updateCollections} = this.props;
-		 const collectionRef = firestore.collection('collections');
-		 // fetch('https://firestore.googleapis.com/v1/projects/crwn-db-6f850/databases/(default)/documents/collections')
-		 // .then(response =>response.json())
-		 // .then(collections => console.log(collections))
-		 collectionRef.get().then(snapshot => {
-		 		    const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
-			      	console.log('collectionsMap',collectionsMap)
-			      	updateCollections(collectionsMap);
-			      	this.setState({ loading: false }); 
-    	 	});
-  }
 
-	render()
-	{
-		const {match} = this.props;
-		const {loading} = this.state;
+
+const ShopPage =({fetchCollectionsStart,match})=>
+{
+	useEffect(() => {
+		fetchCollectionsStart()
+	}, [fetchCollectionsStart])
+
+		
+		
 		 return( <div className="shop-page">
-			          <Route exact path={`${match.path}`}  render={(props)=>(<CollectionsOverviewWithSpinner isLoading={loading} {...props} />)} />
-			          <Route path={`${match.path}/:collectionId`} render={(props)=>(<CollectionPageWithSpinner isLoading={loading} {...props} />)}/>
+			          <Route exact path={`${match.path}`}  component={collectionsOverviewContainer} />
+			          <Route path={`${match.path}/:collectionId`} component={collectionPageContainer}/>
 			       
-			   </div>)
+			   </div>) 
 		
 		
-	}
+	
         
 		
 }
+
 const mapDispatchToProps = dispatch => ({
-  updateCollections: collectionsMap =>
-    dispatch(updateCollections(collectionsMap))
+  fetchCollectionsStart: () =>
+    dispatch(fetchCollectionsStart())
 });
 export default connect(
-  null,
+null,
   mapDispatchToProps
 )(ShopPage);
